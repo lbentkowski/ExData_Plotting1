@@ -1,0 +1,58 @@
+# Load required packages
+library(dplyr)
+library(lubridate)
+lines <- readLines("household_power_consumption.txt")
+# read data from file
+df <- read.table("household_power_consumption.txt", header = TRUE, sep = ";", colClasses = "character")
+# subseting only desirable dates using dplyr
+df_sub <- df %>%  
+  filter(Date == "1/2/2007" | Date == "2/2/2007") %>% # filter two days defined in task
+  transform(Date = (dmy(Date))) %>%                   # change date format do yyy-mm-dd
+  mutate(Date_time = as.POSIXct(paste(Date,Time)))    # add column with date-time format as time series.
+# check if classes are properly defined for Date and Date_time
+df_sub[ , 3:9] <- sapply(df_sub[ , 3:9], as.numeric)
+lapply(df_sub, class)
+# Plot1 a histogram
+png(file="plot1.png",width=480,height=480)
+hist(df_sub$Global_active_power,
+     main ="Global Active Power",
+     xlab ="Global Active Power (kilowatts)",
+     col = "red")
+dev.off()
+
+# Plot2 a histogram
+png(file="plot2.png",width=480,height=480)
+plot(df_sub$Date_time, df_sub$Global_active_power,
+     ylab ="Global Active Power (kilowatts)",
+     xlab = "",
+     col = "black",
+     type = "l")
+dev.off()
+
+# Plot3 a histogram
+png(file="plot3.png",width=480,height=480)
+plot(df_sub$Date_time, df_sub$Sub_metering_1,
+     ylab ="Energy sub metering",
+     xlab = "",
+     col = "black",
+     type = "l")
+lines(df_sub$Date_time, df_sub$Sub_metering_2, col="red")
+lines(df_sub$Date_time, df_sub$Sub_metering_3, col="blue")
+legend("topright", legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), col = c("black","red","blue"), lty = 1)
+dev.off()
+
+# Plot4 
+png(file="plot4.png",width=480,height=480)
+par (mfcol = c(2,2))
+#First
+plot(df_sub$Date_time, df_sub$Global_active_power,ylab ="Global Active Power (kilowatts)",xlab = "", col = "black", type = "l")
+#Second
+plot(df_sub$Date_time, df_sub$Sub_metering_1, ylab ="Energy sub metering",xlab = "", col = "black", type = "l")
+lines(df_sub$Date_time, df_sub$Sub_metering_2, col="red")
+lines(df_sub$Date_time, df_sub$Sub_metering_3, col="blue")
+legend("topright", legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), col = c("black","red","blue"), lty = 1)
+#Third
+plot(df_sub$Date_time, df_sub$Voltage,ylab ="Voltage",xlab = "datetime", col = "black", type = "l")
+#Forth
+plot(df_sub$Date_time, df_sub$Global_reactive_power,ylab ="Global_reactive_power",xlab = "datetime", col = "black", type = "l")
+dev.off()
