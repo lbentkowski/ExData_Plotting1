@@ -26,7 +26,7 @@ plot(df_sub$Date_time, df_sub$Global_active_power,ylab ="Global Active Power (ki
 plot(df_sub$Date_time, df_sub$Sub_metering_1, ylab ="Energy sub metering",xlab = "", col = "black", type = "l")
 lines(df_sub$Date_time, df_sub$Sub_metering_2, col="red")
 lines(df_sub$Date_time, df_sub$Sub_metering_3, col="blue")
-legend("topright", legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), col = c("black","red","blue"), lty = 1)
+legend("topright", legend = c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), col = c("black","red","blue"), lty = 1, bty = "n")
 #Third
 plot(df_sub$Date_time, df_sub$Voltage,ylab ="Voltage",xlab = "datetime", col = "black", type = "l")
 #Fourth
